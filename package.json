@@ -38,7 +38,7 @@
     "@types/http-errors": "^1.6.3",
     "@types/js-base64": "^2.3.1",
     "@types/jsonwebtoken": "^8.3.5",
-    "@types/koa": "^2.0.50",
+    "@types/koa": "^2.0.52",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-conditional-get": "^2.0.0",
     "@types/koa-etag": "^3.0.0",

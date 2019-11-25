@@ -14,7 +14,7 @@ export default function validatorMiddleware<T>(
     })
     const errors = await validate(data)
 
-    ctx.validator = {
+    ctx.state.validator = {
       data,
       errors
     }

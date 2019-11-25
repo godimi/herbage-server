@@ -14,7 +14,7 @@ export default function authMiddleware(
   return async (ctx: Context, next: () => Promise<unknown>): Promise<void> => {
     if (!ctx.header.authorization) {
       if (options.continue) {
-        ctx.isAdmin = false
+        ctx.state.isAdmin = false
         await next()
         return
       } else throw new createError.Unauthorized()
@@ -24,12 +24,13 @@ export default function authMiddleware(
         ctx.header.authorization.replace('Bearer ', ''),
         process.env.JWT_SECRET || 'secret'
       )
-      ctx.isAdmin = true
+      ctx.state.isAdmin = true
     } catch (err) {
-      ctx.isAdmin = false
+      ctx.state.isAdmin = false
     }
 
-    if (!ctx.isAdmin && !options.continue) throw new createError.Unauthorized()
+    if (!ctx.state.isAdmin && !options.continue)
+      throw new createError.Unauthorized()
 
     await next()
   }

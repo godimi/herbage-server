@@ -14,15 +14,15 @@ router.get(
   validatorMiddleware(RequestQuery, { where: 'query' }),
   authMiddleware(),
   async (ctx): Promise<void> => {
-    const data = ctx.validator.data as RequestQuery
+    const data = ctx.state.validator.data as RequestQuery
 
-    if (ctx.header.authorization && !ctx.isAdmin) {
+    if (ctx.header.authorization && !ctx.state.isAdmin) {
       throw new createError.Unauthorized()
     }
 
     const posts = await Post.getList(data.count, data.cursor, {
-      admin: ctx.isAdmin,
-      condition: ctx.isAdmin
+      admin: ctx.state.isAdmin,
+      condition: ctx.state.isAdmin
         ? {
             status: data.status
           }
@@ -30,12 +30,12 @@ router.get(
     })
     ctx.status = 200
     ctx.body = {
-      posts: ctx.isAdmin
+      posts: ctx.state.isAdmin
         ? posts.map((v): Record<keyof typeof v, unknown> => v.toJSON())
         : posts.map((v): PostPublicFields => v.getPublicFields()),
       cursor:
         posts.length > 0
-          ? ctx.isAdmin
+          ? ctx.state.isAdmin
             ? posts[posts.length - 1]._id
             : posts[posts.length - 1].number
           : null,
@@ -100,7 +100,7 @@ router.patch(
   authMiddleware({ continue: false }),
   validatorMiddleware(EditPost),
   async (ctx): Promise<void> => {
-    const body = ctx.validator.data as EditPost
+    const body = ctx.state.validator.data as EditPost
 
     let result
 
