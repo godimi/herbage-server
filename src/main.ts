@@ -15,6 +15,7 @@ import * as bodyParser from 'koa-bodyparser'
 import * as json from 'koa-json'
 import * as mongoose from 'mongoose'
 import * as helmet from 'koa-helmet'
+import * as cors from '@koa/cors'
 import posts from './routes/posts'
 import a1p4ca from './routes/a1p4ca'
 import verify from './routes/verify'
@@ -35,6 +36,7 @@ mongoose
 const app = new Koa()
 const router = new Router()
 
+app.use(cors())
 app.use(helmet())
 app.use(json())
 app.use(conditional())

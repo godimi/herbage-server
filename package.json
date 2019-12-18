@@ -15,6 +15,7 @@
     "node": "^13"
   },
   "dependencies": {
+    "@koa/cors": "^2.2.3",
     "@typegoose/typegoose": "^6.1.5",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.9.1",
@@ -46,6 +47,7 @@
     "@types/koa-json": "^2.0.18",
     "@types/koa-logger": "^3.1.1",
     "@types/koa-router": "^7.0.42",
+    "@types/koa__cors": "^2.2.3",
     "@types/mongoose": "^5.5.32",
     "@types/node": "^12.12.12",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
