@@ -36,7 +36,7 @@ router.get(
       cursor:
         posts.length > 0
           ? ctx.state.isAdmin
-            ? posts[posts.length - 1]._id
+            ? posts[posts.length - 1].cursorId
             : posts[posts.length - 1].number
           : null,
       hasNext: posts.length === data.count
