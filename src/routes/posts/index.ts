@@ -73,7 +73,7 @@ router.post(
   '/',
   validatorMiddleware(NewPost),
   async (ctx): Promise<void> => {
-    const body = ctx.validator.data as NewPost
+    const body = ctx.state.validator.data as NewPost
     const verifier = await Verifier.findOne({
       _id: Base64.decode(body.verifier.id)
     }).exec()
