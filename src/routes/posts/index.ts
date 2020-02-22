@@ -135,7 +135,7 @@ router.delete(
   '/:arg',
   authMiddleware(),
   async (ctx): Promise<void> => {
-    const post = ctx.isAdmin
+    const post = ctx.state.isAdmin
       ? await Post.findById(ctx.params.arg)
       : await Post.findOne({ hash: ctx.params.arg })
     if (!post) throw new createError.NotFound()
