@@ -52,6 +52,10 @@ export class NewPost {
   public tag: string
 
   @Expose()
+  @IsString()
+  public captcha: string
+
+  @Expose()
   @Type((): typeof RequestVerifySchema => RequestVerifySchema)
   @ValidateNested()
   public verifier: RequestVerifySchema

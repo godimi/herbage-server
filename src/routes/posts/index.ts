@@ -1,5 +1,6 @@
 import * as Router from 'koa-router'
 import * as createError from 'http-errors'
+import axios from 'axios'
 
 import Post, { PostStatus, PostPublicFields } from '../../models/Post'
 import Verifier from '../../models/Verifier'
@@ -74,6 +75,19 @@ router.post(
   validatorMiddleware(NewPost),
   async (ctx): Promise<void> => {
     const body = ctx.state.validator.data as NewPost
+
+    const { success } = (await axios.post(
+      'https://www.google.com/recaptcha/api/siteverify',
+      {
+        secret: process.env.RECAPTCHA_SECRET,
+        response: body.captcha
+      }
+    )).data
+
+    if (!success) {
+      throw new createError.UnavailableForLegalReasons() // HTTP 451
+    }
+
     const verifier = await Verifier.findOne({
       _id: Base64.decode(body.verifier.id)
     }).exec()
