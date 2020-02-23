@@ -76,7 +76,7 @@ router.post(
   async (ctx): Promise<void> => {
     const body = ctx.state.validator.data as NewPost
 
-    const { success } = (await axios.post(
+    const response = (await axios.post(
       'https://www.google.com/recaptcha/api/siteverify',
       {
         secret: process.env.RECAPTCHA_SECRET,
@@ -84,9 +84,11 @@ router.post(
       }
     )).data
 
-    if (!success) {
-      throw new createError.UnavailableForLegalReasons() // HTTP 451
-    }
+    console.log(response)
+
+    // if (!success) {
+    //   throw new createError.UnavailableForLegalReasons() // HTTP 451
+    // }
 
     const verifier = await Verifier.findOne({
       _id: Base64.decode(body.verifier.id)
