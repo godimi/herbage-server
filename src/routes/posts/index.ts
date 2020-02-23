@@ -8,6 +8,7 @@ import Verifier from '../../models/Verifier'
 import authMiddleware from '../../middlewares/auth'
 import validatorMiddleware from '../../middlewares/validator'
 import { RequestQuery, NewPost, EditPost } from './types'
+import { sendMessage } from '../../discord'
 
 const router = new Router()
 
@@ -112,6 +113,8 @@ router.post(
     ctx.status = 201
     ctx.set('Location', `/api/posts/${result.id}`)
     ctx.body = result.getAuthorFields()
+
+    sendMessage('새로운 제보다냥!')
   }
 )
 
@@ -160,7 +163,9 @@ router.delete(
       : await Post.findOne({ hash: ctx.params.arg })
     if (!post) throw new createError.NotFound()
 
-    ctx.isAdmin ? await post.remove() : await post.setDeleted()
+    ctx.state.isAdmin ? await post.remove() : await post.setDeleted()
+
+    if (!ctx.state.isAdmin) sendMessage('제보 삭제 요청이다냥!')
 
     ctx.status = 200
   }
