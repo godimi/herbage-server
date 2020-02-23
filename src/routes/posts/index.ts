@@ -85,6 +85,8 @@ router.post(
     )).data
 
     console.log(response)
+    console.log(process.env.RECAPTCHA_SECRET)
+    console.log(body.captcha)
 
     // if (!success) {
     //   throw new createError.UnavailableForLegalReasons() // HTTP 451
