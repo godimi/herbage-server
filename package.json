@@ -17,7 +17,6 @@
   "dependencies": {
     "@koa/cors": "^2.2.3",
     "@typegoose/typegoose": "^6.1.5",
-    "axios": "^0.19.2",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.9.1",
     "dotenv-safe": "^8.2.0",
