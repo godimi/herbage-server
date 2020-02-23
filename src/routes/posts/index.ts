@@ -1,7 +1,7 @@
 import * as Router from 'koa-router'
 import * as createError from 'http-errors'
 import axios from 'axios'
-import qs from 'querystring'
+import { stringify } from 'querystring'
 
 import Post, { PostStatus, PostPublicFields } from '../../models/Post'
 import Verifier from '../../models/Verifier'
@@ -79,7 +79,7 @@ router.post(
 
     const { success } = (await axios.post(
       'https://www.google.com/recaptcha/api/siteverify',
-      qs.stringify({
+      stringify({
         secret: process.env.RECAPTCHA_SECRET,
         response: body.captcha
       }),
