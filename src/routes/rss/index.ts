@@ -28,16 +28,16 @@ router.get(
         title: post.title || '',
         url: `https://bamboo.dimigo.dev/post/${post.number}`,
         description: post.tag,
-        date: new Date(post.createdAt),
+        date: new Date(post.createdAt + 9 * 60 * 60 * 1000),
         guid: post.id.toString(),
         custom_elements: [
           { link: `https://bamboo.dimigo.dev/post/${post.number}` },
           {
-            'content:encoded': `<!doctype html><html><head><meta charset="utf-8"></head><body><article><header><h1>${
+            'content:encoded': `<!doctype html><html><head><meta charset="utf-8"></head><body><article><header><h1>#${
               post.number
-            }번째코드</h1><h2>${post.title || ''}</h2></header><p>${
-              post.content
-            }</p></article></body></html>`
+            }번째코드</h1><h2>${post.title || ''}</h2><h3 class="op-kicker">${
+              post.tag
+            }</h3></header><p>${post.content}</p></article></body></html>`
           }
         ]
       })
