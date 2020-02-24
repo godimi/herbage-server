@@ -44,7 +44,7 @@ router.get(
               post.number
             }번째코드</h1><h2>${post.title || ''}</h2><h3 class="op-kicker">${
               post.tag
-            }</h3></header>${content}</article></body></html>`
+            }</h3><figure><img src="https://i.postimg.cc/wBJRKDty/bamboocover.jpg" /></figure></header>${content}</article></body></html>`
           }
         ]
       })
