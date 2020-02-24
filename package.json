@@ -34,7 +34,8 @@
     "koa-router": "^7.4.0",
     "koa-swagger-decorator": "^1.6.0",
     "mongoose": "^5.7.12",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "rss": "^1.2.2"
   },
   "devDependencies": {
     "@types/http-errors": "^1.6.3",
@@ -51,6 +52,7 @@
     "@types/koa__cors": "^2.2.3",
     "@types/mongoose": "^5.5.32",
     "@types/node": "^12.12.12",
+    "@types/rss": "0.0.28",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "eslint": "^6.7.0",

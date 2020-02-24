@@ -8,7 +8,7 @@ import Verifier from '../../models/Verifier'
 import authMiddleware from '../../middlewares/auth'
 import validatorMiddleware from '../../middlewares/validator'
 import { RequestQuery, NewPost, EditPost } from './types'
-import { sendMessage } from '../../discord'
+import { sendMessage } from '../../apis/discord'
 
 const router = new Router()
 

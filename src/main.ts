@@ -19,6 +19,7 @@ import * as cors from '@koa/cors'
 import posts from './routes/posts'
 import a1p4ca from './routes/a1p4ca'
 import verify from './routes/verify'
+import rss from './routes/rss'
 import conditional = require('koa-conditional-get')
 import etag = require('koa-etag')
 import Router = require('koa-router')
@@ -72,6 +73,7 @@ app.use(
 router.use('/posts', posts.routes(), posts.allowedMethods())
 router.use('/a1p4ca', a1p4ca.routes(), a1p4ca.allowedMethods())
 router.use('/verify', verify.routes(), verify.allowedMethods())
+router.use('/rss', rss.routes(), rss.allowedMethods())
 
 app.use(router.routes()).use(router.allowedMethods())
 
