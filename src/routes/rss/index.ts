@@ -24,6 +24,13 @@ router.get(
     //     post.createdAt > new Date().getTime() - 60 * 60 * 1000
     // )
     recentPosts.forEach((post): void => {
+      const paragraphs = post.content
+        .split('\n')
+        .map((v): string => `<p>${v}</p>`)
+      let content = ''
+      paragraphs.forEach((p): void => {
+        content += p
+      })
       feed.item({
         title: post.title || '',
         url: `https://bamboo.dimigo.dev/post/${post.number}`,
@@ -37,7 +44,7 @@ router.get(
               post.number
             }번째코드</h1><h2>${post.title || ''}</h2><h3 class="op-kicker">${
               post.tag
-            }</h3></header><p>${post.content}</p></article></body></html>`
+            }</h3></header>${content}</article></body></html>`
           }
         ]
       })
