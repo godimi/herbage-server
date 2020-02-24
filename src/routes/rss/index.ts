@@ -42,7 +42,9 @@ router.get(
           {
             'content:encoded': `<!doctype html><html><head><meta charset="utf-8"></head><body><article><header><h1>#${
               post.number
-            }번째코드</h1><h2>${post.title || ''}</h2><h3 class="op-kicker">${
+            }번째코드</h1>${
+              post.title ? `<h2>${post.title}</h2>` : ''
+            }<h3 class="op-kicker">${
               post.tag
             }</h3><figure><img src="https://i.postimg.cc/wBJRKDty/bamboocover.jpg" /></figure></header>${content}</article></body></html>`
           }
