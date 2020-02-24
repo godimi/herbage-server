@@ -35,7 +35,7 @@ router.get(
         title: post.title || '',
         url: `https://bamboo.dimigo.dev/post/${post.number}`,
         description: post.tag,
-        date: new Date(post.createdAt + 9 * 60 * 60 * 1000),
+        date: new Date(post.createdAt),
         guid: post.id.toString(),
         custom_elements: [
           { link: `https://bamboo.dimigo.dev/post/${post.number}` },
