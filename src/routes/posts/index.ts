@@ -61,9 +61,21 @@ router.get(
 )
 
 router.get(
-  '/:id',
+  '/:number',
   async (ctx): Promise<void> => {
-    const post = await Post.findOne({ hash: ctx.params.id })
+    const post = await Post.findOne({ number: ctx.params.number })
+
+    if (!post) throw new createError.NotFound()
+
+    ctx.status = 200
+    ctx.body = post
+  }
+)
+
+router.get(
+  '/hash/:hash',
+  async (ctx): Promise<void> => {
+    const post = await Post.findOne({ hash: ctx.params.hash })
 
     if (!post) throw new createError.NotFound()
 
