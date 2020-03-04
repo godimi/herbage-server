@@ -146,7 +146,9 @@ router.patch(
       }
     } else {
       if (!body.content && !body.fbLink) throw new createError.BadRequest()
-      result = await post.edit(body.content || body.fbLink)
+      result = body.content
+        ? await post.edit(body.content)
+        : await post.setFbLink(body.fbLink || '')
     }
     ctx.status = 200
     ctx.body = result.toJSON()
