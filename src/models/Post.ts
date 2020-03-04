@@ -143,14 +143,6 @@ class Post {
     return this.save()
   }
 
-  public async setFbLink(
-    this: DocumentType<Post>,
-    fbLink: string
-  ): Promise<DocumentType<Post>> {
-    this.fbLink = fbLink
-    return this.save()
-  }
-
   public getPublicFields(this: DocumentType<Post>): PostPublicFields {
     return {
       id: this.id,
