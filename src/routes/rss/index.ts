@@ -22,7 +22,7 @@ router.get(
     recentPosts.forEach((post): void => {
       const paragraphs = post.content
         .split('\n')
-        .map((v): string => `<p>${replaceLtGt(v)}</p>`)
+        .map((v): string => (v ? `<p>${replaceLtGt(v)}</p>` : ''))
       let content = ''
       paragraphs.forEach((p): void => {
         content += p
