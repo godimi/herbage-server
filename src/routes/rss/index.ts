@@ -19,10 +19,6 @@ router.get(
     const recentPosts = posts.map(
       (post): PostPublicFields => post.getPublicFields()
     )
-    // .filter(
-    //   (post): boolean =>
-    //     post.createdAt > new Date().getTime() - 60 * 60 * 1000
-    // )
     recentPosts.forEach((post): void => {
       const paragraphs = post.content
         .split('\n')
@@ -43,10 +39,12 @@ router.get(
             'content:encoded': `<!doctype html><html><head><meta charset="utf-8"></head><body><article><header><h1>#${
               post.number
             }번째코드</h1>${
-              post.title ? `<h2>${post.title}</h2>` : ''
+              post.title ? `<h2>${replaceLtGt(post.title)}</h2>` : ''
             }<h3 class="op-kicker">${
               post.tag
-            }</h3><figure><img src="https://i.postimg.cc/wBJRKDty/bamboocover.jpg" /></figure></header>${content}</article></body></html>`
+            }</h3><figure><img src="https://i.postimg.cc/wBJRKDty/bamboocover.jpg" /></figure></header>${replaceLtGt(
+              content
+            )}</article></body></html>`
           }
         ]
       })
@@ -56,5 +54,9 @@ router.get(
     ctx.body = feed.xml()
   }
 )
+
+const replaceLtGt = (text: string): string => {
+  return text.replace('<', '&lt;').replace('>', '&gt;')
+}
 
 export default router
