@@ -113,7 +113,9 @@ router.post(
     ctx.set('Location', `/api/posts/${result.id}`)
     ctx.body = result.getAuthorFields()
 
-    sendMessage('새로운 제보다냥!')
+    if (body.title !== 'test') {
+      sendMessage('새로운 제보다냥!')
+    }
   }
 )
 
