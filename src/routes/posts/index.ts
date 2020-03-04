@@ -48,19 +48,6 @@ router.get(
 )
 
 router.get(
-  '/number',
-  async (ctx): Promise<void> => {
-    const newNumber =
-      ((await Post.find()
-        .sort({ number: -1 })
-        .limit(1)
-        .exec())[0].number || 0) + 1
-    ctx.status = 200
-    ctx.body = { newNumber }
-  }
-)
-
-router.get(
   '/:number',
   async (ctx): Promise<void> => {
     const post = await Post.findOne({ number: ctx.params.number })
@@ -143,12 +130,10 @@ router.patch(
     if (!post) throw new createError.NotFound()
 
     if (body.status) {
-      if (body.status === 'ACCEPTED' && post.status === 'ACCEPTED')
-        throw new createError.UnavailableForLegalReasons()
       switch (body.status) {
         case PostStatus.Accepted:
-          if (!body.fbLink) throw new createError.BadRequest()
-          result = await post.setAccepted(body.fbLink)
+          if (post.number) throw new createError.UnavailableForLegalReasons()
+          result = await post.setAccepted()
           break
         case PostStatus.Rejected:
           if (!body.reason) throw new createError.BadRequest()
@@ -158,8 +143,8 @@ router.patch(
           throw new createError.BadRequest()
       }
     } else {
-      if (!body.content) throw new createError.BadRequest()
-      result = await post.edit(body.content)
+      if (!body.content && !body.fbLink) throw new createError.BadRequest()
+      result = await post.edit(body.content || body.fbLink)
     }
     ctx.status = 200
     ctx.body = result.toJSON()

@@ -105,10 +105,12 @@ class Post {
 
   public async edit(
     this: DocumentType<Post>,
-    newContent: string
+    newContent?: string,
+    newFbLink?: string
   ): Promise<DocumentType<Post>> {
     this.history.push({ content: this.content, createdAt: new Date() })
-    this.content = newContent
+    this.content = newContent || this.content
+    this.fbLink = newFbLink || this.fbLink
 
     return this.save()
   }
@@ -130,16 +132,22 @@ class Post {
   }
 
   public async setAccepted(
-    this: DocumentType<Post>,
-    fbLink: string
+    this: DocumentType<Post>
   ): Promise<DocumentType<Post>> {
     this.status = PostStatus.Accepted
-    this.fbLink = fbLink
     this.number =
       ((await PostModel.find()
         .sort({ number: -1 })
         .limit(1)
         .exec())[0].number || 0) + 1
+    return this.save()
+  }
+
+  public async setFbLink(
+    this: DocumentType<Post>,
+    fbLink: string
+  ): Promise<DocumentType<Post>> {
+    this.fbLink = fbLink
     return this.save()
   }
 

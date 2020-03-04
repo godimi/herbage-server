@@ -4,17 +4,17 @@ import Router = require('koa-router')
 
 const router = new Router()
 
-const feed = new RSS({
-  title: '디대숲',
-  description: '한국디지털미디어고등학교 대나무숲',
-  pubDate: new Date(),
-  feed_url: 'https://api.bamboo.dimigo.dev/rss',
-  site_url: 'https://bamboo.dimigo.dev'
-})
-
 router.get(
   '/',
   async (ctx): Promise<void> => {
+    const feed = new RSS({
+      title: '디대숲',
+      description: '한국디지털미디어고등학교 대나무숲',
+      pubDate: new Date(),
+      feed_url: 'https://api.bamboo.dimigo.dev/rss',
+      site_url: 'https://bamboo.dimigo.dev'
+    })
+
     const posts = await Post.getList()
     const recentPosts = posts.map(
       (post): PostPublicFields => post.getPublicFields()
