@@ -22,20 +22,20 @@ router.get(
     recentPosts.forEach((post): void => {
       const paragraphs = post.content
         .split('\n')
-        .map((v): string => (v ? `<p>${replaceLtGt(v)}</p>` : ''))
+        .map((v): string => (v != null ? `<p>${replaceLtGt(v)}</p>` : ''))
       let content = ''
       paragraphs.forEach((p): void => {
         content += p
       })
       const publishedDate = new Date(post.createdAt)
       feed.item({
-        title: post.title || '',
-        url: `https://bamboo.dimigo.dev/post/${post.number}`,
+        title: post.title ?? '',
+        url: `https://bamboo.dimigo.dev/post/${post.number as number}`,
         description: post.tag,
         date: publishedDate,
         guid: post.id.toString(),
         custom_elements: [
-          { link: `https://bamboo.dimigo.dev/post/${post.number}` },
+          { link: `https://bamboo.dimigo.dev/post/${post.number as number}` },
           {
             'content:encoded': `
             <!doctype html>
@@ -47,8 +47,12 @@ router.get(
               <body>
                 <article>
                   <header>
-                    <h1>#${post.number}번째코드</h1>
-                    ${post.title ? `<h2>${replaceLtGt(post.title)}</h2>` : ''}
+                    <h1>#${post.number ?? '?'}번째코드</h1>
+                    ${
+                      post.title != null
+                        ? `<h2>${replaceLtGt(post.title)}</h2>`
+                        : ''
+                    }
                     <h3 class="op-kicker">${post.tag}</h3>
                     <figure><img src="https://i.postimg.cc/wBJRKDty/bamboocover.jpg" /></figure>
                     <time class="op-published" datetime=${publishedDate.toISOString()}>

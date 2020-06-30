@@ -96,6 +96,7 @@ class Post {
   public hash: string
 
   public get cursorId(): string {
+    // eslint-disable-next-line
     return Base64.encode(this._id.toString())
   }
 
@@ -109,10 +110,10 @@ class Post {
     newFbLink?: string
   ): Promise<DocumentType<Post>> {
     this.history.push({ content: this.content, createdAt: new Date() })
-    this.content = newContent || this.content
-    this.fbLink = newFbLink || this.fbLink
+    this.content = newContent ?? this.content
+    this.fbLink = newFbLink ?? this.fbLink
 
-    return this.save()
+    return await this.save()
   }
 
   public async setRejected(
@@ -121,14 +122,14 @@ class Post {
   ): Promise<DocumentType<Post>> {
     this.status = PostStatus.Rejected
     this.reason = reason
-    return this.save()
+    return await this.save()
   }
 
   public async setDeleted(
     this: DocumentType<Post>
   ): Promise<DocumentType<Post>> {
     this.status = PostStatus.Deleted
-    return this.save()
+    return await this.save()
   }
 
   public async setAccepted(
@@ -136,11 +137,9 @@ class Post {
   ): Promise<DocumentType<Post>> {
     this.status = PostStatus.Accepted
     this.number =
-      ((await PostModel.find()
-        .sort({ number: -1 })
-        .limit(1)
-        .exec())[0].number || 0) + 1
-    return this.save()
+      ((await PostModel.find().sort({ number: -1 }).limit(1).exec())[0]
+        .number ?? 0) + 1
+    return await this.save()
   }
 
   public getPublicFields(this: DocumentType<Post>): PostPublicFields {
@@ -172,8 +171,8 @@ class Post {
 
   public static async getList(
     this: ModelType<Post> & typeof Post,
-    count: number = 10,
-    cursor: string = '',
+    count = 10,
+    cursor = '',
     options: {
       admin: boolean
       condition?: Record<string, unknown>
@@ -181,7 +180,7 @@ class Post {
   ): Promise<Array<DocumentType<Post>>> {
     // 관리자는 오래된 글부터, 일반 사용자는 최신 글부터
     const isAdminAndNotPending =
-      options.admin && (options.condition || {}).status !== PostStatus.Pending
+      options.admin && (options.condition ?? {}).status !== PostStatus.Pending
     const condition = options.admin
       ? {
           // 다음 글의 _id: 관리자는 더 크고(커서보다 최신 글),
@@ -192,12 +191,12 @@ class Post {
         }
       : {
           number: {
-            $lt: cursor
+            $lt: parseInt(cursor)
           },
           status: PostStatus.Accepted
         }
 
-    if (!cursor) {
+    if (cursor == null) {
       if (options.admin) delete condition._id
       else delete condition.number
     }

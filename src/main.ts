@@ -1,7 +1,5 @@
 /* eslint-disable import/first */
 
-require('dotenv-safe').config()
-
 import { setGlobalOptions } from '@typegoose/typegoose'
 setGlobalOptions({
   globalOptions: {
@@ -25,7 +23,7 @@ import etag = require('koa-etag')
 import Router = require('koa-router')
 
 mongoose
-  .connect(process.env.MONGO_HOST || '', {
+  .connect(process.env.MONGO_HOST ?? '', {
     useFindAndModify: false,
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -53,7 +51,7 @@ app.use(
         ctx.throw(ctx.status, ctx.message)
       }
     } catch (err) {
-      if (err.status) {
+      if (err.status != null) {
         ctx.status = err.status
         ctx.body = {
           error: err.message

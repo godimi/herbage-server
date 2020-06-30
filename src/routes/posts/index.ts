@@ -18,14 +18,15 @@ router.get(
   authMiddleware(),
   async (ctx): Promise<void> => {
     const data = ctx.state.validator.data as RequestQuery
+    const isAdmin = ctx.state.isAdmin as boolean
 
-    if (ctx.header.authorization && !ctx.state.isAdmin) {
+    if (ctx.header.authorization != null && !isAdmin) {
       throw new createError.Unauthorized()
     }
 
     const posts = await Post.getList(data.count, data.cursor, {
       admin: ctx.state.isAdmin,
-      condition: ctx.state.isAdmin
+      condition: isAdmin
         ? {
             status: data.status
           }
@@ -33,12 +34,12 @@ router.get(
     })
     ctx.status = 200
     ctx.body = {
-      posts: ctx.state.isAdmin
+      posts: isAdmin
         ? posts.map((v): Record<keyof typeof v, unknown> => v.toJSON())
         : posts.map((v): PostPublicFields => v.getPublicFields()),
       cursor:
         posts.length > 0
-          ? ctx.state.isAdmin
+          ? isAdmin
             ? posts[posts.length - 1].cursorId
             : posts[posts.length - 1].number
           : null,
@@ -50,12 +51,16 @@ router.get(
 router.get(
   '/:number',
   async (ctx): Promise<void> => {
-    const post = await Post.findOne({ number: ctx.params.number })
+    const post = await Post.findOne({
+      number: ctx.params.number
+    })
 
-    if (!post) throw new createError.NotFound()
+    if (post == null) throw new createError.NotFound()
+
+    if (post.status !== PostStatus.Accepted) throw new createError.NotFound()
 
     ctx.status = 200
-    ctx.body = post
+    ctx.body = post.getPublicFields()
   }
 )
 
@@ -64,7 +69,7 @@ router.get(
   async (ctx): Promise<void> => {
     const post = await Post.findOne({ hash: ctx.params.hash })
 
-    if (!post) throw new createError.NotFound()
+    if (post == null) throw new createError.NotFound()
 
     ctx.status = 200
     ctx.body = post
@@ -77,20 +82,22 @@ router.post(
   async (ctx): Promise<void> => {
     const body = ctx.state.validator.data as NewPost
 
-    const { success } = (await axios.post(
-      'https://www.google.com/recaptcha/api/siteverify',
-      stringify({
-        secret: process.env.RECAPTCHA_SECRET,
-        response: body.captcha
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+    const { success } = (
+      await axios.post(
+        'https://www.google.com/recaptcha/api/siteverify',
+        stringify({
+          secret: process.env.RECAPTCHA_SECRET,
+          response: body.captcha
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
         }
-      }
-    )).data
+      )
+    ).data
 
-    if (!success) {
+    if (success == null) {
       throw new createError.UnavailableForLegalReasons() // HTTP 451
     }
 
@@ -98,7 +105,7 @@ router.post(
       _id: Base64.decode(body.verifier.id)
     }).exec()
 
-    if (!verifier || !verifier.isCorrect(body.verifier.answer)) {
+    if (verifier == null || !verifier.isCorrect(body.verifier.answer)) {
       throw new createError.UnavailableForLegalReasons() // HTTP 451
     }
 
@@ -110,7 +117,7 @@ router.post(
 
     // https://stackoverflow.com/questions/19199872/best-practice-for-restful-post-response
     ctx.status = 201
-    ctx.set('Location', `/api/posts/${result.id}`)
+    ctx.set('Location', `/api/posts/${result.id as string}`)
     ctx.body = result.getAuthorFields()
 
     if (body.title !== 'test') {
@@ -129,23 +136,25 @@ router.patch(
     let result
 
     const post = await Post.findById(ctx.params.id)
-    if (!post) throw new createError.NotFound()
+    if (post == null) throw new createError.NotFound()
 
-    if (body.status) {
+    if (body.status != null) {
       switch (body.status) {
         case PostStatus.Accepted:
-          if (post.number) throw new createError.UnavailableForLegalReasons()
+          if (post.number != null)
+            throw new createError.UnavailableForLegalReasons()
           result = await post.setAccepted()
           break
         case PostStatus.Rejected:
-          if (!body.reason) throw new createError.BadRequest()
+          if (body.reason == null) throw new createError.BadRequest()
           result = await post.setRejected(body.reason)
           break
         default:
           throw new createError.BadRequest()
       }
     } else {
-      if (!body.content && !body.fbLink) throw new createError.BadRequest()
+      if (body.content == null && body.fbLink == null)
+        throw new createError.BadRequest()
       result = await post.edit(body.content, body.fbLink)
     }
     ctx.status = 200
@@ -157,14 +166,15 @@ router.delete(
   '/:arg',
   authMiddleware(),
   async (ctx): Promise<void> => {
-    const post = ctx.state.isAdmin
+    const isAdmin = ctx.state.isAdmin as boolean
+    const post = isAdmin
       ? await Post.findById(ctx.params.arg)
       : await Post.findOne({ hash: ctx.params.arg })
-    if (!post) throw new createError.NotFound()
+    if (post == null) throw new createError.NotFound()
 
-    ctx.state.isAdmin ? await post.remove() : await post.setDeleted()
+    isAdmin ? await post.remove() : await post.setDeleted()
 
-    if (!ctx.state.isAdmin) sendMessage('제보 삭제 요청이다냥!')
+    if (!isAdmin) sendMessage('제보 삭제 요청이다냥!')
 
     ctx.status = 200
   }

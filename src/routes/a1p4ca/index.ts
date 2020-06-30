@@ -16,7 +16,7 @@ router.post(
       throw new createError.Unauthorized()
     }
 
-    const token = sign({ name: '관리자' }, process.env.JWT_SECRET || 'secret', {
+    const token = sign({ name: '관리자' }, process.env.JWT_SECRET ?? 'secret', {
       expiresIn: '3h'
     })
 

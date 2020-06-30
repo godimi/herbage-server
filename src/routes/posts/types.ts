@@ -21,7 +21,6 @@ export class RequestQuery {
 
   @Expose()
   @IsOptional()
-  @IsBase64()
   public cursor?: string
 }
 

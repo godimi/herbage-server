@@ -12,7 +12,7 @@ export default function authMiddleware(
   options: { continue: boolean } = { continue: true }
 ): (ctx: Context, next: () => Promise<unknown>) => Promise<void> {
   return async (ctx: Context, next: () => Promise<unknown>): Promise<void> => {
-    if (!ctx.header.authorization) {
+    if (ctx.header.authorization == null) {
       if (options.continue) {
         ctx.state.isAdmin = false
         await next()
@@ -22,15 +22,16 @@ export default function authMiddleware(
     try {
       jwt.verify(
         ctx.header.authorization.replace('Bearer ', ''),
-        process.env.JWT_SECRET || 'secret'
+        process.env.JWT_SECRET ?? 'secret'
       )
       ctx.state.isAdmin = true
     } catch (err) {
       ctx.state.isAdmin = false
     }
 
-    if (!ctx.state.isAdmin && !options.continue)
-      throw new createError.Unauthorized()
+    const isAdmin = ctx.state.isAdmin as boolean
+
+    if (!isAdmin && !options.continue) throw new createError.Unauthorized()
 
     await next()
   }

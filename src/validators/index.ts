@@ -1,15 +1,12 @@
-import {
-  registerDecorator,
-  ValidationOptions,
-  Validator
-} from 'class-validator'
-
-const validator = new Validator()
+import { registerDecorator, ValidationOptions, isInt } from 'class-validator'
 
 export function IsIntString(
   validationOptions?: ValidationOptions
 ): (object: Record<string, unknown>, propertyName: string) => void {
-  return function(object: Record<string, unknown>, propertyName: string): void {
+  return function (
+    object: Record<string, unknown>,
+    propertyName: string
+  ): void {
     registerDecorator({
       name: 'isIntString',
       target: object.constructor,
@@ -17,7 +14,7 @@ export function IsIntString(
       options: validationOptions,
       validator: {
         validate(value: unknown): boolean {
-          return typeof value === 'string' && validator.isInt(Number(value))
+          return typeof value === 'string' && isInt(Number(value))
         }
       }
     })
