@@ -42,7 +42,8 @@ router.get(
             <html>
               <head>
                 <meta charset="utf-8">
-                <meta property="op:version" content="1.0.1" />
+                <meta property="op:version" content="1.0.2">
+                <meta property="fb:use_automatic_ad_placement" content="enable=true ad_density=default">
               </head>
               <body>
                 <article>
@@ -60,6 +61,9 @@ router.get(
                     <time class="op-published" datetime=${publishedDate.toISOString()}>
                       ${timeText(publishedDate)}
                     </time>
+                    <figure class="op-ad">
+                      <iframe width="300" height="250" style="border:0; margin:0;" src="https://www.facebook.com/adnw_request?placement=571304060247820_571304090247817&adtype=banner300x250"></iframe>
+                    </figure>
                   </header>
                   ${content}
                 </article>
