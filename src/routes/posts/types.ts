@@ -69,6 +69,11 @@ export class EditPost {
   @Expose()
   @IsString()
   @IsOptional()
+  public title?: string
+
+  @Expose()
+  @IsString()
+  @IsOptional()
   public status?: string
 
   @Expose()

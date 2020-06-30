@@ -157,7 +157,7 @@ router.patch(
     } else {
       if (body.content == null && body.fbLink == null)
         throw new createError.BadRequest()
-      result = await post.edit(body.content, body.fbLink)
+      result = await post.edit(body.title, body.content, body.fbLink)
     }
     ctx.status = 200
     ctx.body = result.toJSON()

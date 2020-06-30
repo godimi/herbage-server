@@ -106,10 +106,12 @@ export class Post {
 
   public async edit(
     this: DocumentType<Post>,
+    newTitle?: string,
     newContent?: string,
     newFbLink?: string
   ): Promise<DocumentType<Post>> {
     this.history.push({ content: this.content, createdAt: new Date() })
+    this.title = newTitle ?? this.title
     this.content = newContent ?? this.content
     this.fbLink = newFbLink ?? this.fbLink
 
