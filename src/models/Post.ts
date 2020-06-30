@@ -56,7 +56,7 @@ export class PostHistory {
     }
   }
 })
-class Post {
+export class Post {
   // for type analysis
   public _id: Schema.Types.ObjectId
   public createdAt: Date
@@ -64,8 +64,8 @@ class Post {
   @prop()
   public number?: number
 
-  @prop({ trim: true })
-  public title?: string
+  @prop({ required: true, trim: true, default: '' })
+  public title: string
 
   @prop({ required: true, trim: true })
   public content: string

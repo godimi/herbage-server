@@ -18,6 +18,7 @@
     "@koa/cors": "^3.1.0",
     "@typegoose/typegoose": "^7.2.0",
     "axios": "^0.19.2",
+    "canvas": "^2.6.1",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
     "dotenv-safe": "^8.2.0",
