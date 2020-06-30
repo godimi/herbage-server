@@ -54,7 +54,9 @@ router.get(
                         : ''
                     }
                     <h3 class="op-kicker">${post.tag}</h3>
-                    <figure><img src="https://i.postimg.cc/wBJRKDty/bamboocover.jpg" /></figure>
+                    <figure><img src="https://api.dimigo.dev/thumbnail/${
+                      post.number as number
+                    }.jpeg" /></figure>
                     <time class="op-published" datetime=${publishedDate.toISOString()}>
                       ${timeText(publishedDate)}
                     </time>
