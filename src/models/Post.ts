@@ -191,12 +191,12 @@ class Post {
         }
       : {
           number: {
-            $lt: parseInt(cursor)
+            $lt: parseInt(cursor ?? '0')
           },
           status: PostStatus.Accepted
         }
 
-    if (cursor == null) {
+    if (cursor === '') {
       if (options.admin) delete condition._id
       else delete condition.number
     }
