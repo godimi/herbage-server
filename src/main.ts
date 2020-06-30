@@ -11,6 +11,7 @@ import * as Koa from 'koa'
 import * as logger from 'koa-logger'
 import * as bodyParser from 'koa-bodyparser'
 import * as json from 'koa-json'
+import * as serve from 'koa-static'
 import * as mongoose from 'mongoose'
 import * as helmet from 'koa-helmet'
 import * as cors from '@koa/cors'
@@ -42,6 +43,7 @@ app.use(conditional())
 app.use(etag())
 app.use(logger())
 app.use(bodyParser())
+app.use(serve('thumbnail'))
 
 app.use(
   async (ctx, next): Promise<void> => {
