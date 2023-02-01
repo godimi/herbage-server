@@ -36,7 +36,7 @@
     "koa-router": "^9.0.1",
     "koa-static": "^5.0.0",
     "koa-swagger-decorator": "^1.6.8",
-    "mongoose": "^5.9.20",
+    "mongoose": "^5.13.15",
     "reflect-metadata": "^0.1.13",
     "rss": "^1.2.2"
   },
